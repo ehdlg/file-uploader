@@ -29,16 +29,8 @@ erDiagram
         TIMESTAMP created_at
     }
 
-    SESSIONS {
-        UUID id PK
-        UUID user_id FK
-        JSON session_data
-        TIMESTAMP expires_at
-    }
-
     USERS ||--o{ FOLDERS : "has many"
     USERS ||--o{ FILES : "has many"
-    USERS ||--o{ SESSIONS : "has many"
     FOLDERS ||--o{ FILES : "contains"
     FOLDERS ||--o| FOLDERS : "parent-child"
 ```
