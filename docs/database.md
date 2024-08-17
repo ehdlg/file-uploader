@@ -23,14 +23,12 @@ erDiagram
         VARCHAR name
         TEXT url
         UUID folder_id FK
-        UUID user_id FK
         BIGINT size
         VARCHAR mime_type
         TIMESTAMP created_at
     }
 
     USERS ||--o{ FOLDERS : "has many"
-    USERS ||--o{ FILES : "has many"
     FOLDERS ||--o{ FILES : "contains"
     FOLDERS ||--o| FOLDERS : "parent-child"
 ```
