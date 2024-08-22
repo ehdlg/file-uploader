@@ -1,5 +1,6 @@
 import { UUID } from 'crypto';
 import { QueryResult } from 'pg';
+import { VALID_COLUMNS } from './constants';
 
 export interface IUser extends QueryResult {
   id: UUID;
@@ -25,3 +26,5 @@ export interface IFiles extends QueryResult {
   folder_id: UUID;
   created_at: Date;
 }
+
+export type ValidColumns = (typeof VALID_COLUMNS)[number];
