@@ -11,5 +11,7 @@ const pool = new Pool({
   database: DB_NAME,
 });
 
-export const query = <T extends QueryResultRow>(text: string, params?: string[] | number[]) =>
-  pool.query<T>(text, params);
+export const query = <T extends QueryResultRow>(
+  text: string,
+  params?: (string | number | Date)[]
+) => pool.query<T>(text, params);
