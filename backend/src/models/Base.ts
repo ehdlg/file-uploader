@@ -1,5 +1,7 @@
 import { QueryResult } from 'pg';
 import { query } from '../db';
+import { VALID_COLUMNS } from '../constants';
+import { ValidColumns } from '../interfaces';
 
 export default class Base<T extends QueryResult> {
   protected query;
@@ -52,5 +54,14 @@ export default class Base<T extends QueryResult> {
     const { rowCount } = await this.query<T>(sql, [id]);
 
     return rowCount as number;
+  }
+
+  async findByColumnValue(column: ValidColumns, value: string | number | Date): Promise<T> {
+    if (!VALID_COLUMNS.includes(column)) throw new Error('Invalid column');
+
+    const query = `SELECT * FROM users WHERE ${column} = $1`;
+    const { rows } = await this.query<T>(query, [value]);
+
+    return rows[0];
   }
 }
