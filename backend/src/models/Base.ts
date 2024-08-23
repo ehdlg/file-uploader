@@ -2,6 +2,7 @@ import { QueryResult } from 'pg';
 import { query } from '../db';
 import { VALID_COLUMNS } from '../constants';
 import { ValidColumns } from '../interfaces';
+import { UUID } from 'crypto';
 
 export default class Base<T extends QueryResult> {
   protected query;
@@ -17,7 +18,7 @@ export default class Base<T extends QueryResult> {
     return rows;
   }
 
-  async findById(id: string): Promise<T | null> {
+  async findById(id: UUID): Promise<T | null> {
     const sql = `SELECT * FROM ${this.table} WHERE id = $1`;
     const { rows } = await this.query<T>(sql, [id]);
 
@@ -35,7 +36,7 @@ export default class Base<T extends QueryResult> {
     return rows[0];
   }
 
-  async update(id: string, data: Partial<T>): Promise<T | null> {
+  async update(id: UUID, data: Partial<T>): Promise<T | null> {
     const columns = Object.keys(data);
     const setClause = columns.map((column, index) => `${column} = $${index + 1}`).join(', ');
     const values = Object.values(data);
@@ -48,7 +49,7 @@ export default class Base<T extends QueryResult> {
     return rows[0];
   }
 
-  async delete(id: string): Promise<number> {
+  async delete(id: UUID): Promise<number> {
     const sql = `DELETE FROM ${this.table} WHERE id = $1`;
 
     const { rowCount } = await this.query<T>(sql, [id]);
