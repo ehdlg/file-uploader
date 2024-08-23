@@ -15,3 +15,6 @@ export const VALID_COLUMNS = [
   'url',
   'size',
 ] as const;
+
+export const PASSWORD_REGEXP =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
