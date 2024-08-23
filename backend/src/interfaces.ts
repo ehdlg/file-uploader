@@ -2,7 +2,16 @@ import { UUID } from 'crypto';
 import { QueryResult } from 'pg';
 import { VALID_COLUMNS } from './constants';
 
-export interface IUser extends QueryResult {
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Express {
+    interface Request {
+      validatedData: ValidatedData;
+    }
+  }
+}
+
+export interface User {
   id: UUID;
   username: string;
   email: string;
@@ -10,7 +19,7 @@ export interface IUser extends QueryResult {
   created_at: Date;
 }
 
-export interface IFolders extends QueryResult {
+export interface Folder {
   id: UUID;
   name: string;
   parent_id: UUID | null;
@@ -18,7 +27,7 @@ export interface IFolders extends QueryResult {
   created_at: Date;
 }
 
-export interface IFiles extends QueryResult {
+export interface File {
   id: UUID;
   name: string;
   mimetype: string;
@@ -26,5 +35,17 @@ export interface IFiles extends QueryResult {
   folder_id: UUID;
   created_at: Date;
 }
+
+export type UserData = Omit<User, 'id'> & { userId: UUID };
+export type FolderData = Omit<Folder, 'id'> & { folderId: UUID };
+export type FileData = Omit<File, 'id'> & { fileId: UUID };
+
+export type ValidatedData = Partial<UserData | FolderData | FileData>;
+
+export interface IUser extends User, QueryResult {}
+
+export interface IFolder extends Folder, QueryResult {}
+
+export interface IFile extends File, QueryResult {}
 
 export type ValidColumns = (typeof VALID_COLUMNS)[number];
