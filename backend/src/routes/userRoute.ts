@@ -7,7 +7,15 @@ const router = Router();
 
 router.get('/:userId', userIdRule, validateData, UserController.getOne);
 
-router.put('/:userId', userPutRules, validateData, UserController.update);
+router.put(
+  '/:userId',
+  userPutRules,
+  userIdRule,
+  validateData,
+  UserController.checkUsernameExists,
+  UserController.checkEmailExists,
+  UserController.update
+);
 
 router.delete('/:userId', userIdRule, validateData, UserController.delete);
 
