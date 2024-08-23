@@ -48,16 +48,16 @@ export default class UserController {
   }
 
   static async update(req: Request, res: Response, next: NextFunction) {
-    const { userId } = req.params;
-    const { email, password } = req.body;
+    const { email, password, username, userId } = req.validatedData;
 
     const updatedData = {
+      username,
       email,
       password,
     };
 
     try {
-      const updatedUser = await UserController.Model.update(userId as UUID, updatedData);
+      const updatedUser = await UserController.Model.update(userId, updatedData);
 
       return res.json(updatedUser);
     } catch (error) {
@@ -66,10 +66,10 @@ export default class UserController {
   }
 
   static async delete(req: Request, res: Response, next: NextFunction) {
-    const { userId } = req.params;
+    const { userId } = req.validatedData;
 
     try {
-      const user = await UserController.Model.findById(userId as UUID);
+      const user = await UserController.Model.findById(userId);
 
       if (null == user) throw new HttpError({ message: 'User not found', status: 404 });
 
@@ -82,7 +82,7 @@ export default class UserController {
   }
 
   static async getByCredentials(req: Request, res: Response) {
-    const { email } = req.body;
+    const { email } = req.validatedData;
 
     if (null == email) return res.status(400).json({ error: 'bad request' });
 
@@ -93,7 +93,7 @@ export default class UserController {
   }
 
   static async checkUsernameExists(req: Request, _res: Response, next: NextFunction) {
-    const { username } = req.body;
+    const { username } = req.validatedData;
 
     try {
       const { rowCount } = await UserController.Model.findByColumnValue('username', username);
@@ -107,7 +107,7 @@ export default class UserController {
   }
 
   static async checkEmailExists(req: Request, _res: Response, next: NextFunction) {
-    const { email } = req.body;
+    const { email } = req.validatedData;
 
     try {
       const { rowCount } = await UserController.Model.findByColumnValue('email', email);

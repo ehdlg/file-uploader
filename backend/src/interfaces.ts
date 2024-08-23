@@ -40,7 +40,7 @@ export type UserData = Omit<User, 'id'> & { userId: UUID; confirmPassword: strin
 export type FolderData = Omit<Folder, 'id'> & { folderId: UUID };
 export type FileData = Omit<File, 'id'> & { fileId: UUID };
 
-export type ValidatedData = Partial<UserData | FolderData | FileData>;
+export type ValidatedData = UserData & FolderData & FileData;
 
 export interface IUser extends User, QueryResult {}
 
