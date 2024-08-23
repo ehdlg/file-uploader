@@ -56,12 +56,15 @@ export default class Base<T extends QueryResult> {
     return rowCount as number;
   }
 
-  async findByColumnValue(column: ValidColumns, value: string | number | Date): Promise<T> {
+  async findByColumnValue(
+    column: ValidColumns,
+    value: string | number | Date
+  ): Promise<QueryResult<T>> {
     if (!VALID_COLUMNS.includes(column)) throw new Error('Invalid column');
 
     const query = `SELECT * FROM users WHERE ${column} = $1`;
-    const { rows } = await this.query<T>(query, [value]);
+    const data = await this.query<T>(query, [value]);
 
-    return rows[0];
+    return data;
   }
 }
