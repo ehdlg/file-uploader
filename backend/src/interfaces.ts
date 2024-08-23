@@ -36,7 +36,7 @@ export interface File {
   created_at: Date;
 }
 
-export type UserData = Omit<User, 'id'> & { userId: UUID };
+export type UserData = Omit<User, 'id'> & { userId: UUID; confirmPassword: string };
 export type FolderData = Omit<Folder, 'id'> & { folderId: UUID };
 export type FileData = Omit<File, 'id'> & { fileId: UUID };
 
