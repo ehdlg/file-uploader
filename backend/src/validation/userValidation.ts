@@ -5,7 +5,8 @@ export const userIdRule = (() => {
   return [
     param('userId')
       .exists()
-      .withMessage('An ID must be sent')
+      .withMessage('User ID must be sent')
+      .bail()
       .isUUID()
       .withMessage('Invalid user ID'),
   ];
