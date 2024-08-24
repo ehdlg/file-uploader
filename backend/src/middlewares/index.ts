@@ -3,7 +3,6 @@ import { HttpError } from '../errors/HttpError';
 import { ErrorRequestHandler, NextFunction, Request, RequestHandler, Response } from 'express';
 import { ValidatedData } from '../interfaces';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const handleError: ErrorRequestHandler = (error, _req, res, _next) => {
   const status = error.status || 500;
   const message = error.message || 'Something went wrong';
