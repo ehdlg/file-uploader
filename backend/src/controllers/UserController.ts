@@ -21,7 +21,7 @@ export default class UserController {
     const { userId } = req.validatedData;
 
     try {
-      const user = await UserController.Model.findById(userId as UUID);
+      const user = await UserController.Model.findById(userId);
 
       if (null == user) throw new HttpError({ status: 404, message: 'User not found' });
 
@@ -48,13 +48,7 @@ export default class UserController {
   }
 
   static async update(req: Request, res: Response, next: NextFunction) {
-    const { email, password, username, userId } = req.validatedData;
-
-    const updatedData = {
-      username,
-      email,
-      password,
-    };
+    const { userId, ...updatedData } = req.validatedData;
 
     try {
       const updatedUser = await UserController.Model.update(userId, updatedData);
