@@ -13,5 +13,5 @@ const pool = new Pool({
 
 export const query = <T extends QueryResultRow>(
   text: string,
-  params?: (string | number | Date)[]
+  params?: (string | number | Date | null)[]
 ) => pool.query<T>(text, params);
