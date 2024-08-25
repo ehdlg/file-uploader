@@ -1,5 +1,19 @@
 import { body, param } from 'express-validator';
 
+export const invalidFolder = (value: string) => {
+  if (value === null) {
+    return true;
+  }
+
+  const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+
+  if (uuidRegex.test(value)) {
+    return true;
+  }
+
+  throw new Error('Invalid folder ID');
+};
+
 export const folderIdRule = (() => {
   return [
     param('folderId')
@@ -20,22 +34,7 @@ export const folderPostRules = (() => {
       .notEmpty()
       .withMessage('Folder name must not be empty'),
 
-    body('parent_id')
-      .optional({ values: 'null' })
-      .custom((value) => {
-        if (value === null) {
-          return true;
-        }
-
-        const uuidRegex =
-          /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
-
-        if (uuidRegex.test(value)) {
-          return true;
-        }
-
-        throw new Error('Invalid parent folder ID');
-      }),
+    body('parent_id').optional({ values: 'null' }).custom(invalidFolder),
   ];
 })();
 
@@ -49,21 +48,6 @@ export const folderPutRules = (() => {
       .notEmpty()
       .withMessage('Folder name must not be empty'),
 
-    body('parent_id')
-      .optional({ values: 'null' })
-      .custom((value) => {
-        if (value === null) {
-          return true;
-        }
-
-        const uuidRegex =
-          /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
-
-        if (uuidRegex.test(value)) {
-          return true;
-        }
-
-        throw new Error('Invalid parent folder ID');
-      }),
+    body('parent_id').optional({ values: 'null' }).custom(invalidFolder),
   ];
 })();
