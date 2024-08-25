@@ -31,7 +31,7 @@ export default class FolderController {
     const { folderId, userId } = req.validatedData;
     console.log(folderId, userId);
     try {
-      const folder = await FolderController.Model.findByFolderAndUserId(folderId, userId);
+      const folder = await FolderController.Model.findByUserId(folderId, userId);
       console.log(folder);
 
       if (null == folder) throw new HttpError({ status: 404, message: 'Folder not found' });

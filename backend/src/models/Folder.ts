@@ -16,7 +16,7 @@ export class Folder extends Base<IFolder> {
     return rows;
   }
 
-  async findByFolderAndUserId(folderId: UUID, userId: UUID) {
+  async findByUserId(folderId: UUID, userId: UUID) {
     const sql = 'SELECT * FROM folders WHERE id = $1 AND user_id = $2';
     const { rows } = await this.query<IFolder>(sql, [folderId, userId]);
 
