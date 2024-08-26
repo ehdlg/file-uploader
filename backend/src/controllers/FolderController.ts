@@ -41,6 +41,18 @@ export default class FolderController {
     }
   }
 
+  static async getSubfolders(req: Request, res: Response, next: NextFunction) {
+    const { folderId } = req.validatedData;
+
+    try {
+      const subfolders = await FolderController.Model.findSubfolders(folderId);
+
+      return res.json(subfolders);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async create(req: Request, res: Response, next: NextFunction) {
     const { name, userId, folderId } = req.validatedData;
 
