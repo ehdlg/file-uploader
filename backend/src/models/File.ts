@@ -27,4 +27,12 @@ export class File extends Base<IFile> {
 
     return rows[0] || null;
   }
+
+  async findByNameAndFolder(name: string, folderId: UUID) {
+    const sql = 'SELECT * FROM files WHERE name = $1 AND folder_id = $2';
+
+    const { rows } = await this.query<IFile>(sql, [name, folderId]);
+
+    return rows[0] || null;
+  }
 }
