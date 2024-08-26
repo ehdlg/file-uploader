@@ -23,6 +23,14 @@ export class Folder extends Base<IFolder> {
     return rows[0] || null;
   }
 
+  async findSubfolders(folderId: UUID) {
+    const sql = 'SELECT * FROM folders WHERE parent_id = $1';
+
+    const { rows } = await this.query<IFolder>(sql, [folderId]);
+
+    return rows;
+  }
+
   async findByNameParentAndUser(folderName: string, userId: UUID, parentId: UUID | null) {
     const sql = `
      SELECT * FROM folders 
