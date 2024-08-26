@@ -1,7 +1,8 @@
 import { body, param } from 'express-validator';
+import { ROOT_FOLDER_NAME } from '../constants';
 
 export const invalidFolder = (value: string) => {
-  if (value === null) {
+  if (value === null || value === ROOT_FOLDER_NAME) {
     return true;
   }
 
@@ -16,12 +17,7 @@ export const invalidFolder = (value: string) => {
 
 export const folderIdRule = (() => {
   return [
-    param('folderId')
-      .exists()
-      .withMessage('Folder ID must be sent')
-      .bail()
-      .isUUID()
-      .withMessage('Invalid folder ID'),
+    param('folderId').exists().withMessage('Folder ID must be sent').bail().custom(invalidFolder),
   ];
 })();
 
