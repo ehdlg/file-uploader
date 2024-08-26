@@ -7,6 +7,15 @@ import { userIdRule } from '../validation';
 const router = Router({ mergeParams: true });
 
 router.get(
+  '/:folderId/subfolders',
+  userIdRule,
+  folderIdRule,
+  validateData,
+  FolderController.checkIfRootFolder,
+  FolderController.getSubfolders
+);
+
+router.get(
   '/:folderId',
   userIdRule,
   folderIdRule,
