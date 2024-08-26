@@ -25,3 +25,21 @@ CREATE TABLE files (
   folder_id UUID REFERENCES folders(id) ON DELETE CASCADE ON UPDATE CASCADE,
   UNIQUE (name, folder_id)
 );
+
+CREATE OR REPLACE FUNCTION create_root_folder()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+AS $$
+BEGIN
+  INSERT INTO folders (name, user_id, parent_id) 
+  VALUES ('root', NEW.id, NULL);
+
+  RETURN NULL;
+END;
+$$;
+
+CREATE OR REPLACE TRIGGER trigger_create_root_folder
+  AFTER INSERT
+  ON users
+  FOR EACH ROW
+    EXECUTE FUNCTION create_root_folder()
