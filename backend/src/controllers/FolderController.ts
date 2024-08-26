@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpError } from '../errors/HttpError';
 import { Folder } from '../models/Folder';
+import { ROOT_FOLDER_NAME } from '../constants';
 
 export default class FolderController {
   static Model = new Folder();
@@ -29,10 +30,8 @@ export default class FolderController {
 
   static async getOne(req: Request, res: Response, next: NextFunction) {
     const { folderId, userId } = req.validatedData;
-    console.log(folderId, userId);
     try {
       const folder = await FolderController.Model.findByUserId(folderId, userId);
-      console.log(folder);
 
       if (null == folder) throw new HttpError({ status: 404, message: 'Folder not found' });
 
@@ -43,13 +42,13 @@ export default class FolderController {
   }
 
   static async create(req: Request, res: Response, next: NextFunction) {
-    const { name, userId, parent_id } = req.validatedData;
+    const { name, userId, folderId } = req.validatedData;
 
     try {
       const newFolder = await FolderController.Model.create({
         name,
         user_id: userId,
-        parent_id: parent_id ?? null,
+        parent_id: folderId,
       });
 
       return res.status(201).json(newFolder);
@@ -116,14 +115,10 @@ export default class FolderController {
   }
 
   static async checkDuplicateFolder(req: Request, _res: Response, next: NextFunction) {
-    const { name, userId, parent_id } = req.validatedData;
+    const { name, userId, folderId } = req.validatedData;
 
     try {
-      const folder = await FolderController.Model.findByNameParentAndUser(
-        name,
-        userId,
-        parent_id ?? null
-      );
+      const folder = await FolderController.Model.findByNameParentAndUser(name, userId, folderId);
 
       if (null == folder) return next();
 
@@ -134,5 +129,17 @@ export default class FolderController {
     } catch (error) {
       next(error);
     }
+  }
+
+  static async checkIfRootFolder(req: Request, _res: Response, next: NextFunction) {
+    const { folderId, userId } = req.validatedData;
+
+    if ((folderId as string) === ROOT_FOLDER_NAME) {
+      const value = await FolderController.Model.findRootId(userId);
+
+      req.validatedData.folderId = value.id;
+    }
+
+    return next();
   }
 }
