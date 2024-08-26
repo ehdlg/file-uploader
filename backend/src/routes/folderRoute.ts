@@ -6,7 +6,14 @@ import { userIdRule } from '../validation';
 
 const router = Router({ mergeParams: true });
 
-router.get('/:folderId', userIdRule, folderIdRule, validateData, FolderController.getOne);
+router.get(
+  '/:folderId',
+  userIdRule,
+  folderIdRule,
+  validateData,
+  FolderController.checkIfRootFolder,
+  FolderController.getOne
+);
 
 router.delete(
   '/:folderId',
@@ -23,16 +30,17 @@ router.put(
   folderIdRule,
   folderPutRules,
   validateData,
+  FolderController.checkIfRootFolder,
   FolderController.checkFolderExists,
   FolderController.update
 );
 
 router.post(
-  '/',
+  '/:folderId',
   userIdRule,
   folderPostRules,
   validateData,
-  FolderController.checkParentExists,
+  FolderController.checkIfRootFolder,
   FolderController.checkDuplicateFolder,
   FolderController.create
 );
