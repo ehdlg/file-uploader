@@ -23,19 +23,21 @@ export const folderIdRule = (() => {
 
 export const folderPostRules = (() => {
   return [
+    param('folderId').optional({ values: 'null' }).custom(invalidFolder),
+
     body('name')
       .exists()
       .withMessage('A folder name must be sent')
       .bail()
       .notEmpty()
       .withMessage('Folder name must not be empty'),
-
-    body('parent_id').optional({ values: 'null' }).custom(invalidFolder),
   ];
 })();
 
 export const folderPutRules = (() => {
   return [
+    param('folderId').optional({ values: 'null' }).custom(invalidFolder),
+
     body('name')
       .optional()
       .exists()
@@ -43,7 +45,5 @@ export const folderPutRules = (() => {
       .bail()
       .notEmpty()
       .withMessage('Folder name must not be empty'),
-
-    body('parent_id').optional({ values: 'null' }).custom(invalidFolder),
   ];
 })();

@@ -1,5 +1,4 @@
 import { body, param } from 'express-validator';
-import { invalidFolder } from './folderValidation';
 
 export const fileIdRule = (() => {
   return [
@@ -75,7 +74,5 @@ export const filePutRules = (() => {
       .bail()
       .isURL()
       .withMessage('Invalid file URL'),
-
-    body('folder_id').optional({ values: 'null' }).custom(invalidFolder),
   ];
 })();
