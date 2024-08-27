@@ -1,0 +1,63 @@
+import { Router } from 'express';
+import FileController from '../controllers/FileController';
+import { folderIdRule } from '../validation/folderValidation';
+import { userIdRule } from '../validation';
+import { validateData } from '../middlewares';
+import { fileIdRule, filePostRules, filePutRules } from '../validation/fileValidation';
+import FolderController from '../controllers/FolderController';
+
+const router = Router({ mergeParams: true });
+
+router.get(
+  '/:fileId',
+  userIdRule,
+  folderIdRule,
+  fileIdRule,
+  validateData,
+  FolderController.checkIfRootFolder,
+  FileController.getOne
+);
+
+router.delete(
+  '/:fileId',
+  fileIdRule,
+  validateData,
+  FolderController.checkIfRootFolder,
+  FileController.checkFileExists,
+  FileController.delete
+);
+
+router.put(
+  '/:fileId',
+  userIdRule,
+  folderIdRule,
+  fileIdRule,
+  filePutRules,
+  validateData,
+  FolderController.checkIfRootFolder,
+  FileController.checkFileExists,
+  FileController.checkDuplicateNameFile,
+  FileController.update
+);
+
+router.post(
+  '/',
+  userIdRule,
+  folderIdRule,
+  filePostRules,
+  validateData,
+  FolderController.checkIfRootFolder,
+  FileController.checkDuplicateNameFile,
+  FileController.create
+);
+
+router.get(
+  '/',
+  userIdRule,
+  folderIdRule,
+  validateData,
+  FolderController.checkIfRootFolder,
+  FileController.getAllFromFolder
+);
+
+export default router;
