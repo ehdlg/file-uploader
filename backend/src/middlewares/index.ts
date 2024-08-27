@@ -1,7 +1,9 @@
+import bcrypt from 'bcrypt';
 import { validationResult, matchedData } from 'express-validator';
 import { HttpError } from '../errors/HttpError';
 import { ErrorRequestHandler, NextFunction, Request, RequestHandler, Response } from 'express';
 import { ValidatedData } from '../interfaces';
+import { SALT } from '../constants';
 
 export const handleError: ErrorRequestHandler = (error, _req, res, _next) => {
   const status = error.status || 500;
@@ -29,4 +31,14 @@ export function validateData(req: Request, res: Response, next: NextFunction) {
   });
 
   return res.status(422).json({ errrors: errorsMessages });
+}
+
+export async function hashPassword(req: Request, _res: Response, next: NextFunction) {
+  const { password } = req.validatedData;
+
+  if (null == password) return next();
+
+  req.validatedData.password = await bcrypt.hash(password, SALT);
+
+  return next();
 }
