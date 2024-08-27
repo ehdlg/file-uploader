@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { query } from '../db';
+import bcrypt from 'bcrypt';
 import { User as UserModel } from '../models/User';
 import { HttpError } from '../errors/HttpError';
 import { UUID } from 'crypto';
@@ -126,6 +127,42 @@ export default class UserController {
       if (null != user) return next();
 
       throw new HttpError({ status: 404, message: 'User does not exist' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async checkUserCredentials(req: Request, _res: Response, next: NextFunction) {
+    const { email, password, username } = req.validatedData;
+
+    try {
+      let userRecord;
+
+      if (email) {
+        userRecord = await UserController.Model.findByColumnValue('email', email);
+      }
+
+      if ((userRecord == null || userRecord?.rowCount == 0) && username) {
+        userRecord = await UserController.Model.findByColumnValue('username', username);
+      }
+
+      if (null == userRecord || userRecord.rowCount == 0 || userRecord.rows.length === 0) {
+        throw new HttpError({ status: 404, message: 'User not found' });
+      }
+
+      const [user] = userRecord.rows;
+
+      if (!(await bcrypt.compare(password, user.password))) {
+        throw new HttpError({ message: 'Unathorized', status: 401 });
+      }
+
+      req.authData = {
+        email: user.email,
+        id: user.id,
+        username: user.username,
+      };
+
+      return next();
     } catch (error) {
       next(error);
     }
