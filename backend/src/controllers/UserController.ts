@@ -113,4 +113,18 @@ export default class UserController {
       next(error);
     }
   }
+
+  static async checkUserExists(req: Request, _res: Response, next: NextFunction) {
+    const { userId } = req.validatedData;
+    try {
+      const user = await UserController.Model.findById(userId);
+      console.log(userId, user);
+
+      if (null != user) return next();
+
+      throw new HttpError({ status: 404, message: 'User does not exist' });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
