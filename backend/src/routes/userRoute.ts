@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import UserController from '../controllers/UserController';
-import { validateData, hashPassword } from '../middlewares';
-import { userIdRule, userPostRules, userPutRules } from '../validation';
+import { validateData, hashPassword, createToken } from '../middlewares';
+import { userLoginRules, userIdRule, userPostRules, userPutRules } from '../validation';
 import folderRoute from './folderRoute';
 
 const router = Router();
@@ -22,6 +22,14 @@ router.put(
 );
 
 router.delete('/:userId', userIdRule, validateData, UserController.delete);
+
+router.post(
+  '/login',
+  userLoginRules,
+  validateData,
+  UserController.checkUserCredentials,
+  createToken
+);
 
 router.post(
   '/',
