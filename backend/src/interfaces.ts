@@ -7,6 +7,7 @@ declare global {
   namespace Express {
     interface Request {
       validatedData: ValidatedData;
+      authData: Auth;
     }
   }
 }
@@ -49,3 +50,5 @@ export interface IFolder extends Folder, QueryResult {}
 export interface IFile extends File, QueryResult {}
 
 export type ValidColumns = (typeof VALID_COLUMNS)[number];
+
+type Auth = Pick<User, 'id' | 'email' | 'username'>;
