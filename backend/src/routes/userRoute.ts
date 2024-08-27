@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import UserController from '../controllers/UserController';
-import { validateData } from '../middlewares';
+import { validateData, hashPassword } from '../middlewares';
 import { userIdRule, userPostRules, userPutRules } from '../validation';
 import folderRoute from './folderRoute';
 
@@ -17,6 +17,7 @@ router.put(
   validateData,
   UserController.checkUsernameExists,
   UserController.checkEmailExists,
+  hashPassword,
   UserController.update
 );
 
@@ -28,6 +29,7 @@ router.post(
   validateData,
   UserController.checkUsernameExists,
   UserController.checkEmailExists,
+  hashPassword,
   UserController.create
 );
 
