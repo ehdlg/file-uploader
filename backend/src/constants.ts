@@ -20,3 +20,5 @@ export const PASSWORD_REGEXP =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 export const ROOT_FOLDER_NAME = 'root';
+
+export const SALT = 10;
