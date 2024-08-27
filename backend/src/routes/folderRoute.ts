@@ -1,10 +1,12 @@
 import { Router } from 'express';
-import { folderIdRule, folderPostRules, folderPutRules } from '../validation/folderValidation';
 import FolderController from '../controllers/FolderController';
+import fileRoute from './fileRoute';
+import { folderIdRule, folderPostRules, folderPutRules, userIdRule } from '../validation';
 import { validateData } from '../middlewares';
-import { userIdRule } from '../validation';
 
 const router = Router({ mergeParams: true });
+
+router.use('/:folderId/files', fileRoute);
 
 router.get(
   '/:folderId/subfolders',
