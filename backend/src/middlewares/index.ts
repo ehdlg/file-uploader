@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { validationResult, matchedData } from 'express-validator';
 import { HttpError } from '../errors/HttpError';
 import { ErrorRequestHandler, RequestHandler } from 'express';
@@ -43,4 +44,16 @@ export const hashPassword: RequestHandler = async (req, _res, next) => {
   req.validatedData.password = await bcrypt.hash(password, salt);
 
   return next();
+};
+
+export const createToken: RequestHandler = async (req, res) => {
+  const { SECRET } = process.env;
+
+  if (null == SECRET) throw new HttpError({ status: 500, message: 'Something went wrong' });
+
+  const { authData } = req;
+
+  const token = jwt.sign(authData, SECRET);
+
+  return res.json({ token });
 };
