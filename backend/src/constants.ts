@@ -21,4 +21,4 @@ export const PASSWORD_REGEXP =
 
 export const ROOT_FOLDER_NAME = 'root';
 
-export const SALT = 10;
+export const SALT_ROUNDS = 10;

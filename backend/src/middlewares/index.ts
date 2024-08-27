@@ -3,7 +3,7 @@ import { validationResult, matchedData } from 'express-validator';
 import { HttpError } from '../errors/HttpError';
 import { ErrorRequestHandler, RequestHandler } from 'express';
 import { ValidatedData } from '../interfaces';
-import { SALT } from '../constants';
+import { SALT_ROUNDS } from '../constants';
 
 export const handleError: ErrorRequestHandler = (error, _req, res, _next) => {
   const status = error.status || 500;
@@ -38,7 +38,9 @@ export const hashPassword: RequestHandler = async (req, _res, next) => {
 
   if (null == password) return next();
 
-  req.validatedData.password = await bcrypt.hash(password, SALT);
+  const salt = await bcrypt.genSalt(SALT_ROUNDS);
+
+  req.validatedData.password = await bcrypt.hash(password, salt);
 
   return next();
 };
