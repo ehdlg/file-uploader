@@ -1,4 +1,4 @@
-import { userPostRules, userPutRules, userIdRule } from './userValidation';
+import { userPostRules, userPutRules, userIdRule, userLoginRules } from './userValidation';
 import { folderIdRule, folderPostRules, folderPutRules, invalidFolder } from './folderValidation';
 
 export {
@@ -9,4 +9,5 @@ export {
   folderPostRules,
   folderPutRules,
   invalidFolder,
+  userLoginRules,
 };
