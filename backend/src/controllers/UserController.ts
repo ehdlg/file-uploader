@@ -51,6 +51,9 @@ export default class UserController {
     const { userId, ...updatedData } = req.validatedData;
 
     try {
+      if (Object.keys(updatedData).length === 0)
+        return res.json(await UserController.Model.findById(userId));
+
       const updatedUser = await UserController.Model.update(userId, updatedData);
 
       return res.json(updatedUser);
