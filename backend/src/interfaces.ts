@@ -1,5 +1,6 @@
 import { UUID } from 'crypto';
 import { QueryResult } from 'pg';
+import { JwtPayload } from 'jsonwebtoken';
 import { VALID_COLUMNS } from './constants';
 
 declare global {
@@ -8,6 +9,7 @@ declare global {
     interface Request {
       validatedData: ValidatedData;
       authData: Auth;
+      verifiedToken: VerifiedToken;
     }
   }
 }
@@ -52,3 +54,5 @@ export interface IFile extends File, QueryResult {}
 export type ValidColumns = (typeof VALID_COLUMNS)[number];
 
 type Auth = Pick<User, 'id' | 'email' | 'username'>;
+
+export type VerifiedToken = JwtPayload & Auth;
