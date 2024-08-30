@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import FolderController from '../controllers/FolderController';
 import fileRoute from './fileRoute';
-import { folderIdRule, folderPostRules, folderPutRules, userIdRule } from '../validation';
+import { folderIdRule, folderPostRules, folderPutRules } from '../validation';
 import { validateData } from '../middlewares';
 
 const router = Router({ mergeParams: true });
@@ -10,7 +10,6 @@ router.use('/:folderId/files', fileRoute);
 
 router.get(
   '/:folderId/subfolders',
-  userIdRule,
   folderIdRule,
   validateData,
   FolderController.checkIfRootFolder,
@@ -19,7 +18,6 @@ router.get(
 
 router.get(
   '/:folderId',
-  userIdRule,
   folderIdRule,
   validateData,
   FolderController.checkIfRootFolder,
@@ -28,7 +26,6 @@ router.get(
 
 router.delete(
   '/:folderId',
-  userIdRule,
   folderIdRule,
   validateData,
   FolderController.checkFolderExists,
@@ -37,7 +34,6 @@ router.delete(
 
 router.put(
   '/:folderId',
-  userIdRule,
   folderIdRule,
   folderPutRules,
   validateData,
@@ -48,7 +44,6 @@ router.put(
 
 router.post(
   '/:folderId',
-  userIdRule,
   folderPostRules,
   validateData,
   FolderController.checkIfRootFolder,
@@ -56,6 +51,6 @@ router.post(
   FolderController.create
 );
 
-router.get('/', userIdRule, validateData, FolderController.getAllFromUser);
+router.get('/', validateData, FolderController.getAllFromUser);
 
 export default router;

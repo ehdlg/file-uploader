@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import FileController from '../controllers/FileController';
 import { folderIdRule } from '../validation/folderValidation';
-import { userIdRule } from '../validation';
 import { validateData } from '../middlewares';
 import { fileIdRule, filePostRules, filePutRules } from '../validation/fileValidation';
 import FolderController from '../controllers/FolderController';
@@ -10,7 +9,6 @@ const router = Router({ mergeParams: true });
 
 router.get(
   '/:fileId',
-  userIdRule,
   folderIdRule,
   fileIdRule,
   validateData,
@@ -29,7 +27,6 @@ router.delete(
 
 router.put(
   '/:fileId',
-  userIdRule,
   folderIdRule,
   fileIdRule,
   filePutRules,
@@ -42,7 +39,6 @@ router.put(
 
 router.post(
   '/',
-  userIdRule,
   folderIdRule,
   filePostRules,
   validateData,
@@ -53,7 +49,6 @@ router.post(
 
 router.get(
   '/',
-  userIdRule,
   folderIdRule,
   validateData,
   FolderController.checkIfRootFolder,

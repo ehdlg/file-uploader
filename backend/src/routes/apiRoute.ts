@@ -1,6 +1,6 @@
 import Router, { Request, Response } from 'express';
 import userRouter from './userRoute';
-import { createToken, validateData, verifyToken } from '../middlewares';
+import { createToken, validateData } from '../middlewares';
 import UserController from '../controllers/UserController';
 import { userLoginRules } from '../validation';
 
