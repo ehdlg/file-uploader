@@ -94,3 +94,12 @@ export const checkUserPermission: RequestHandler = (req, _res, next) => {
 
   throw new HttpError({ message: 'Forbidden', status: 403 });
 };
+
+export const checkAdminPermission: RequestHandler = (req, _res, next) => {
+  const { verifiedToken } = req;
+  const { ADMIN_ID } = process.env;
+
+  if (null != ADMIN_ID && ADMIN_ID == verifiedToken.id) return next();
+
+  throw new HttpError({ status: 403, message: 'Forbidden' });
+};

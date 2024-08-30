@@ -1,6 +1,12 @@
 import { Router } from 'express';
 import UserController from '../controllers/UserController';
-import { validateData, hashPassword, checkUserPermission, verifyToken } from '../middlewares';
+import {
+  validateData,
+  hashPassword,
+  checkUserPermission,
+  verifyToken,
+  checkAdminPermission,
+} from '../middlewares';
 import { userPostRules, userPutRules } from '../validation';
 import folderRoute from './folderRoute';
 
@@ -33,7 +39,7 @@ router.post(
   hashPassword,
   UserController.create
 );
-//TODO add check admin permission
-router.get('/', UserController.getAll);
+
+router.get('/', verifyToken, checkAdminPermission, UserController.getAll);
 
 export default router;
