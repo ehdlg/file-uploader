@@ -48,7 +48,6 @@ router.put(
 
 router.post(
   '/:folderId',
-  userIdRule,
   folderPostRules,
   validateData,
   FolderController.checkIfRootFolder,
@@ -56,6 +55,6 @@ router.post(
   FolderController.create
 );
 
-router.get('/', userIdRule, validateData, FolderController.getAllFromUser);
+router.get('/', validateData, FolderController.getAllFromUser);
 
 export default router;
