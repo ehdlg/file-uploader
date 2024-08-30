@@ -14,7 +14,7 @@ router.post(
   createToken
 );
 
-router.use('/users', verifyToken, userRouter);
+router.use('/users', userRouter);
 
 router.get('/', (_req: Request, res: Response) => {
   res.json({ message: 'Welcome to the File Uploader API' });
